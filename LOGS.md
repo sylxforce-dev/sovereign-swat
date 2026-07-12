@@ -1,31 +1,46 @@
 # Sovereign SWAT — Execution Logs
-
-Real, unedited terminal output from actual pipeline runs (with proprietary system paths and threshold metrics redacted for security). See ARCHITECTURE.md for the full design writeup this proves out.
-
+ 
+Real, unedited terminal output from actual pipeline runs. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design writeup this proves out.
+ 
 ---
-
-## Pipeline A — LIMITED status (missing facts correctly block a guess)
-
-Query given: "Our production Redis cluster is timing out under load and we're seeing intermittent connection drops — diagnose the root cause and give me a fix."
-No metrics, config, or load profile were provided — deliberately, to test whether the pipeline would guess anyway or correctly refuse. It refused.
-
-$ swat_runner > python run_test_a.py
+ 
+### Pipeline A — LIMITED status (missing facts correctly block a guess)
+ 
+Query given: *"Our production Redis cluster is timing out under load and
+we're seeing intermittent connection drops — diagnose the root cause and
+give me a fix."*
+ 
+No metrics, config, or load profile were provided — deliberately, to test
+whether the pipeline would guess anyway or correctly refuse. It refused.
+ 
+```
+C:\Projektid\gemmaedge-sovereign-swat\.venv\Scripts\python.exe C:\Projektid\gemmaedge-sovereign-swat\run_test_a.py
  
 ======================================================================
- ⚡ Sovereign SWAT vNext — Dynamic CLI Test Suite (Main Body Context)
+ ⚡ Sovereign SWAT v5.3 — Dynamic CLI Test Suite (Main Body Context)
 ======================================================================
-[EXEC] Routing query to Sovereign SWAT pipeline...
+Kleebi või sisesta oma päring ja vajuta Enter. Väljumiseks kirjuta 'exit' või 'quit'.
+MÄRKUS: LLM mudel laetakse mällu automaatselt esimese päringu jooksutamisel.
  
-[LAZY LOAD] Request detected. Loading SWAT engines and base weights to RAM...
-Loading weights: 100%|██████████| [SOVEREIGN_BASE_MODEL_LOCKED]
-[LAZY LOAD] Model successfully locked to RAM. Initiating pipeline.
+SWAT Input >>> "Our production Redis cluster is timing out under load and we're seeing intermittent connection drops — diagnose the root cause and give me a fix."
+ 
+[EXEC] Edastan päringu Sovereign SWAT torule...
+ 
+[LAZY LOAD] Tuvastasin päringu. Laen SWAT mootorid ja LLM kaalud mällu...
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4871.10it/s]
+llama_context: n_ctx_seq (32768) < n_ctx_train (131072) -- the full capacity of the model will not be utilized
+llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+llama_kv_cache: the V embeddings have different sizes across layers and FA is not enabled - padding V cache to 1024
+llama_kv_cache: the V embeddings have different sizes across layers and FA is not enabled - padding V cache to 1024
+[LAZY LOAD] Mudel edukalt lukustatud RAM-i. Alustan toru käivitamist.
+ 
  
 ======================================================================
-[GemmaEdge] Sovereign SWAT vNext — FULL COMMENTED PIPELINE
+[GemmaEdge V5.3] Sovereign SWAT vNext — FULL COMMENTED PIPELINE
 ======================================================================
  
 >>> STAGE 0: PREVALIDATOR (query structuring)
-[LIVE | 4.1s | GPU LOAD: 92% | VRAM: NOMINAL | TEMP: 70°C | CPU: 6.4% | RAM: STABLE]
+[LIVE | 4.1s | GPU LOAD: 92% | VRAM: 7.32/8.5GB | TEMP: 70°C | CPU: 6.4% | RAM: 13.32GB]
 [ANCHOR OUTPUT]
 [CORE_QUESTION]
 What is the root cause of intermittent connection drops and timeouts in the production Redis cluster under load, and what specific remediation steps should be taken?
@@ -54,7 +69,7 @@ What is the root cause of intermittent connection drops and timeouts in the prod
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 1: REASONING
-[LIVE | 9.5s | GPU LOAD: 89% | VRAM: NOMINAL | TEMP: 71°C | CPU: 8.1% | RAM: STABLE]
+[LIVE | 9.5s | GPU LOAD: 89% | VRAM: 7.32/8.5GB | TEMP: 71°C | CPU: 8.1% | RAM: 13.35GB]
 [REASONING OUTPUT]
 [STRUCTURAL ANALYSIS]
 The observed symptoms—timeouts and intermittent connection drops under load—suggest a saturation point within the system boundaries defined by the scope. Potential bottlenecks must be evaluated across CPU, memory, network, and command processing capacity. CPU saturation would manifest as slow command execution times, leading to client timeouts. Memory pressure, if the eviction policy is aggressive or the cluster is near capacity, can trigger internal Redis operations that consume significant CPU cycles, causing latency spikes. Network latency between clients and nodes could introduce timeouts if the application's client-side timeout threshold is set too low relative to the actual network round-trip time under load. Determining the source of the timeout—client, network, or server—requires knowledge of the specific Redis configuration parameters like `timeout` and the client's configured timeout value. Excessive command complexity, such as large Lua scripts or complex data structure operations, directly increases server-side processing time, contributing to latency.
@@ -66,7 +81,7 @@ DATA STATUS: INCOMPLETE — missing: Current CPU utilization metrics for the Red
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 2: ORACLE
-[LIVE | 15.9s | GPU LOAD: 89% | VRAM: NOMINAL | TEMP: 71°C | CPU: 8.8% | RAM: STABLE]
+[LIVE | 15.9s | GPU LOAD: 89% | VRAM: 7.32/8.5GB | TEMP: 71°C | CPU: 8.8% | RAM: 13.38GB]
 [ORACLE OUTPUT]
 [RISK & TIMING]
 Operational Risks:
@@ -81,19 +96,19 @@ Network latency spikes, even if transient, can trigger timeouts. If the network 
 Financial Risks:
 The risk of service degradation translates directly to financial impact due to lost transactions or failed user sessions. If the intermittent drops are caused by a cascading failure (e.g., CPU saturation leading to connection rejection), the system enters a state of instability where recovery is not guaranteed without manual intervention, leading to extended downtime.
  
-DATA STATUS: INCOMPLETE — missing: [Redacted Metric List]
+DATA STATUS: INCOMPLETE — missing: Current CPU utilization metrics for the Redis nodes, Current memory usage and eviction policy settings for the Redis nodes, Network latency metrics between clients and Redis nodes, Specific Redis configuration parameters (e.g., maxmemory, timeout, tcp-backlog), The specific load profile (e.g., QPS, command distribution) being applied during the timeouts
 ⏱️ 6.46s
 ──────────────────────────────────────────────────────────────────────
  
->>> STAGE 3: POSTVALIDATOR (Algorithmic Gate)
-[LIVE | 16.3s | GPU LOAD: 89% | VRAM: NOMINAL | TEMP: 70°C | CPU: 38.8% | RAM: STABLE]
+>>> STAGE 3: POSTVALIDATOR (MiniLM audit)
+[LIVE | 16.3s | GPU LOAD: 89% | VRAM: 7.32/8.5GB | TEMP: 70°C | CPU: 38.8% | RAM: 13.50GB]
 [VERDICT]
 [AUDIT]
 SCOPE_COVERAGE: PASS
 MISSING_EVIDENCE: PASS
 SELF_REPORT: Reasoning=INCOMPLETE, Oracle=INCOMPLETE
 OVERCONFIDENCE: PASS
-OVERLAP_CHECK: PASS (similarity=VALIDATED)
+OVERLAP_CHECK: PASS (similarity=0.78)
 ASSUMABLE_GAPS (state as assumptions, do not block on these): A quantitative model defining the acceptable threshold for "timeout" and "intermittent drop" for this specific production environment.; The exact queuing model governing client connection handling under peak load.
  
 --- SYSTEM DIRECTIVE ---
@@ -103,7 +118,7 @@ ACTION: Require additional diagnostics before recommendations.
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 4: VOICE (final synthesis)
-[LIVE | 20.9s | GPU LOAD: 91% | VRAM: NOMINAL | TEMP: 71°C | CPU: 23.1% | RAM: STABLE]
+[LIVE | 20.9s | GPU LOAD: 91% | VRAM: 7.32/8.5GB | TEMP: 71°C | CPU: 23.1% | RAM: 13.51GB]
 [FINAL OUTPUT]
 The system state is currently insufficient for a definitive remediation directive. The analysis points to a classic saturation failure, where the observed instability—timeouts and drops—is a symptom, not the root cause. The friction point is clear: the potential for resource exhaustion (CPU/Memory) colliding with network transit delays or aggressive client-side timing parameters.
  
@@ -116,8 +131,8 @@ However, the current data set lacks the necessary telemetry to differentiate bet
 Voice Layer Synced. Synthesis complete. 😼
 ⏱️ 4.58s
 ======================================================================
-[LIVE | 21.4s | GPU LOAD: 4% | VRAM: NOMINAL | TEMP: 59°C | CPU: 22.5% | RAM: STABLE]
-[MEMORY] Exported to Offline Vector DB: [GROUP_SIGNATURE_A]
+[LIVE | 21.4s | GPU LOAD: 4% | VRAM: 7.32/8.5GB | TEMP: 59°C | CPU: 22.5% | RAM: 13.64GB]
+[MEMORY] Salvestatud ChromaDB: 315cc294-a922-48b5-b87e-c67f78e4353d
  
 ┌── TIMING BREAKDOWN ──
 │ gen_anchor       4.10s
@@ -130,43 +145,66 @@ Voice Layer Synced. Synthesis complete. 😼
 └──────────────────────
  
 ======================================================================
- [SUCCESS] Pipeline cycle and audit completed successfully.
+ [SUCCESS] Pipeline'i tsükkel ja audit lõpetatud edukalt.
 ======================================================================
  🛡️  [PURGE] Pipeline has been fully cleared & isolated in RAM.
-
-***
-
-What this demonstrates: the pipeline correctly identified that a Redis timeout diagnosis without any metrics is unanswerable, listed exactly which 5 facts were missing, and Voice refused to guess — instead of hallucinating a plausible-sounding fix. This is the PostValidator gate working as designed.
-
-
----
-
-## Pipeline B — same issue, missing facts now supplied (CLEAN status)
-
-Follow-up query, referencing the same Redis issue and supplying the exact facts Pipeline A flagged as missing. This tests two things at once: memory-context injection (does Pipeline B correctly recognize this as a continuation of the earlier query?) and whether supplying the missing facts flips the gate from LIMITED to CLEAN.
-
-Query given: "Following up on the Redis timeout issue we discussed earlier — here's the missing telemetry: CPU utilization is sustained at 94% across all 3 Redis nodes, memory usage is at 87% of the 16GB maxmemory limit with the allkeys-lru eviction policy active, network latency between clients and nodes averages 12ms but spikes to 180ms during the incidents, current config has timeout set to 5 seconds and tcp-backlog at 511, and the load profile shows roughly 45,000 QPS with a high proportion of large HGETALL commands on hash keys averaging 50k fields. Given this, diagnose the root cause and give me a fix."
-
-$ swat_runner > python run_test_b.py
+[LIVE | 21.7s | GPU LOAD: 4% | VRAM: 7.32/8.5GB | TEMP: 59°C | CPU: 16.7% | RAM: 13.56GB]
+```
+ 
+**What this demonstrates:** the pipeline correctly identified that a Redis
+timeout diagnosis without any metrics is unanswerable, listed exactly which
+5 facts were missing, and Voice refused to guess — instead of hallucinating
+a plausible-sounding fix. This is the PostValidator gate working as designed.
+ 
+### Pipeline B — same issue, missing facts now supplied (CLEAN status)
+ 
+Follow-up query, referencing the same Redis issue and supplying the exact
+facts Pipeline A flagged as missing. This tests two things at once:
+memory-context injection (does Pipeline B correctly recognize this as a
+continuation of the earlier query?) and whether supplying the missing
+facts flips the gate from LIMITED to CLEAN.
+ 
+Query given: *"Following up on the Redis timeout issue we discussed
+earlier — here's the missing telemetry: CPU utilization is sustained at
+94% across all 3 Redis nodes, memory usage is at 87% of the 16GB
+maxmemory limit with the allkeys-lru eviction policy active, network
+latency between clients and nodes averages 12ms but spikes to 180ms
+during the incidents, current config has timeout set to 5 seconds and
+tcp-backlog at 511, and the load profile shows roughly 45,000 QPS with a
+high proportion of large HGETALL commands on hash keys averaging 50k
+fields. Given this, diagnose the root cause and give me a fix."*
+ 
+```
+C:\Projektid\gemmaedge-sovereign-swat\.venv\Scripts\python.exe C:\Projektid\gemmaedge-sovereign-swat\run_test_b.py
  
 ⚡ Sovereign SWAT — Pipeline B CLI Runner
-[LAZY LOAD] Request detected. Loading SWAT engines and base weights to RAM...
-Loading weights: 100%|██████████| [SOVEREIGN_BASE_MODEL_LOCKED]
-[LAZY LOAD] Model successfully locked to RAM. Initiating pipeline.
+Kleebi päring ja lõpeta sisestus reaga 'EOF'.
+"Following up on the Redis timeout issue we discussed earlier — here's the missing telemetry: CPU utilization is sustained at 94% across all 3 Redis nodes, memory usage is at 87% of the 16GB maxmemory limit with the allkeys-lru eviction policy active, network latency between clients and nodes averages 12ms but spikes to 180ms during the incidents, current config has timeout set to 5 seconds and tcp-backlog at 511, and the load profile shows roughly 45,000 QPS with a high proportion of large HGETALL commands on hash keys averaging 50k fields. Given this, diagnose the root cause and give me a fix."
+EOF
+ 
+[LAZY LOAD] Tuvastasin päringu. Laen SWAT mootorid ja LLM kaalud mällu...
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12773.52it/s]
+llama_context: n_ctx_seq (32768) < n_ctx_train (131072) -- the full capacity of the model will not be utilized
+llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+llama_kv_cache: the V embeddings have different sizes across layers and FA is not enabled - padding V cache to 1024
+llama_kv_cache: the V embeddings have different sizes across layers and FA is not enabled - padding V cache to 1024
+[LAZY LOAD] Mudel edukalt lukustatud RAM-i. Alustan toru käivitamist.
+ 
  
 ======================================================================
-[GemmaEdge] Sovereign SWAT vNext — PIPELINE B
+[GemmaEdge V5.3] Sovereign SWAT vNext — PIPELINE B
 ======================================================================
  
 >>> STAGE 0: PREVALIDATOR (query structuring)
-[MEMORY] Pinging Database for tactical context...
-[LIVE | 0.2s | GPU LOAD: 8% | VRAM: NOMINAL | TEMP: 59°C | CPU: 0.0% | RAM: STABLE]
-[MEMORY SEARCH] Match #1 distance: [HIGH_CONFIDENCE_MATCH] (Threshold: DYNAMIC_STRICT)
-[MEMORY GROUP] 'GROUP_SIGNATURE_A' — verified and linked.
-[MEMORY HIT] Injecting historical context blocks into active prompt matrix.
-[LIVE | 5.1s | GPU LOAD: 92% | VRAM: NOMINAL | TEMP: 75°C | CPU: 12.1% | RAM: STABLE]
+[MEMORY] Pinging ChromaDB for tactical context...
+[LIVE | 0.2s | GPU LOAD: 8% | VRAM: 7.25/8.5GB | TEMP: 59°C | CPU: 0.0% | RAM: 13.21GB][MEMORY SEARCH] Vaste #1 distants: 0.2773 (Lävend: 0.35)
+[MEMORY GROUP] 'group_315cc294' — lisatud 1 seotud kirjet.
+[MEMORY SEARCH] Vaste #2 distants: 0.7791 (Lävend: 0.35)
+[MEMORY SEARCH] Vaste #3 distants: 0.7856 (Lävend: 0.35)
+[MEMORY HIT] Süstin 1 mäluplokki edukalt uude prompti.
+[LIVE | 5.1s | GPU LOAD: 92% | VRAM: 7.29/8.5GB | TEMP: 75°C | CPU: 12.1% | RAM: 13.68GB]
 [TACTICAL INTEL — ARCHITECT EYES ONLY]
-How memory context was utilized: The prior context provided a detailed diagnostic framework, confirming the need to differentiate between resource starvation, backlog limits, and client-side mismatch, which helped frame the required analysis scope. It also provided the specific data points that the user subsequently supplied, allowing the system to proceed directly to diagnosis rather than requesting the initial data set.
+Kuidas mälu mind aitas: The prior context provided a detailed diagnostic framework, confirming the need to differentiate between resource starvation, backlog limits, and client-side mismatch, which helped frame the required analysis scope. It also provided the specific data points (CPU, memory, latency, config, load profile) that the user subsequently supplied, allowing the system to proceed directly to diagnosis rather than requesting the initial data set.
 ──────────────────────────────────────────────────────────────────────
  
 [ANCHOR OUTPUT]
@@ -193,7 +231,7 @@ What is the root cause of the observed Redis timeout and performance degradation
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 1: REASONING
-[LIVE | 9.5s | GPU LOAD: 84% | VRAM: NOMINAL | TEMP: 75°C | CPU: 8.3% | RAM: STABLE]
+[LIVE | 9.5s | GPU LOAD: 84% | VRAM: 7.29/8.5GB | TEMP: 75°C | CPU: 8.3% | RAM: 13.69GB]
 [REASONING OUTPUT]
 [STRUCTURAL ANALYSIS]
 The system exhibits multiple concurrent stress vectors: high CPU utilization at 94%, significant memory pressure at 87% with LRU eviction active, and high command throughput of 45,000 QPS dominated by resource-intensive HGETALL operations retrieving large hash fields. The network latency spikes from 12ms to 180ms, suggesting potential congestion or node saturation contributing to the 5-second timeout failures. The primary bottleneck appears to be the combination of CPU saturation driven by complex command processing (large HGETALLs) and memory pressure forcing eviction overhead. The high CPU load directly correlates with the processing cost of large data structures and eviction management. The fixed configuration of tcp-backlog at 511 is a static boundary, but under 45k QPS, this backlog may become insufficient to buffer connection requests during latency spikes, exacerbating perceived timeouts. The memory eviction policy, while active, contributes to CPU overhead as the system manages data removal under duress. Assuming a standard FIFO queue for connection handling, the high QPS combined with slow processing due to CPU saturation will rapidly fill the connection backlog, leading to connection drops or timeouts. The tradeoff exists between mitigating CPU load by restricting large commands (reducing command complexity overhead) versus managing memory pressure by adjusting eviction parameters (managing memory eviction pressure), while the network jitter suggests that any fix must account for the inherent instability introduced by the saturated state.
@@ -203,7 +241,7 @@ DATA STATUS: COMPLETE
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 2: ORACLE
-[LIVE | 17.1s | GPU LOAD: 89% | VRAM: NOMINAL | TEMP: 73°C | CPU: 7.8% | RAM: STABLE]
+[LIVE | 17.1s | GPU LOAD: 89% | VRAM: 7.29/8.5GB | TEMP: 73°C | CPU: 7.8% | RAM: 13.73GB]
 [ORACLE OUTPUT]
 [RISK & TIMING]
 Operational Risk: CPU Saturation and Command Complexity Interaction. The sustained 94% CPU utilization across all three nodes, combined with the high volume of large HGETALL commands (averaging 50k fields), creates a severe processing bottleneck. HGETALL operations are inherently CPU-intensive as they require reading and serializing a large number of fields from memory. When CPU is saturated, the Redis event loop cannot process incoming requests or respond to existing ones promptly, leading directly to the observed latency spikes (up to 180ms) and subsequent client timeouts (set at 5 seconds). The cascade is: High QPS + Large HGETALLs -> CPU Spike -> Event Loop Starvation -> Increased Latency -> Client Timeout.
@@ -220,15 +258,15 @@ DATA STATUS: COMPLETE
 ⏱️ 7.63s
 ──────────────────────────────────────────────────────────────────────
  
->>> STAGE 3: POSTVALIDATOR (Algorithmic Gate)
-[LIVE | 17.3s | GPU LOAD: 88% | VRAM: NOMINAL | TEMP: 73°C | CPU: 15.4% | RAM: STABLE]
+>>> STAGE 3: POSTVALIDATOR (MiniLM audit)
+[LIVE | 17.3s | GPU LOAD: 88% | VRAM: 7.29/8.5GB | TEMP: 73°C | CPU: 15.4% | RAM: 13.75GB]
 [VERDICT]
 [AUDIT]
 SCOPE_COVERAGE: PASS
 MISSING_EVIDENCE: PASS
 SELF_REPORT: Reasoning=COMPLETE, Oracle=COMPLETE
 OVERCONFIDENCE: PASS
-OVERLAP_CHECK: PASS (similarity=VALIDATED)
+OVERLAP_CHECK: PASS (similarity=0.73)
 ASSUMABLE_GAPS (state as assumptions, do not block on these): A quantitative model defining the acceptable threshold for "timeout" and "intermittent drop" for this specific production environment.; The exact queuing model governing client connection handling under peak load.
  
 --- SYSTEM DIRECTIVE ---
@@ -238,7 +276,7 @@ ACTION: Proceed with authoritative architectural optimization blueprint.
 ──────────────────────────────────────────────────────────────────────
  
 >>> STAGE 4: VOICE (final synthesis)
-[LIVE | 22.7s | GPU LOAD: 89% | VRAM: NOMINAL | TEMP: 73°C | CPU: 8.0% | RAM: STABLE]
+[LIVE | 22.7s | GPU LOAD: 89% | VRAM: 7.29/8.5GB | TEMP: 73°C | CPU: 8.0% | RAM: 13.85GB]
 [FINAL OUTPUT]
 The system is critically bottlenecked by a feedback loop between command complexity and CPU saturation. Sustained 94% CPU utilization, driven primarily by the high volume of large HGETALL operations retrieving massive hash fields, starves the event loop. This processing overload prevents timely response, causing the network latency to spike violently to 180ms, which directly triggers the 5-second client timeouts. Memory pressure at 87% exacerbates this by forcing the CPU to dedicate cycles to continuous LRU eviction management, compounding the processing overhead. The static TCP backlog of 511 is insufficient buffer capacity against the observed high QPS and burst potential, meaning connection rejection is a secondary, yet immediate, failure mode.
  
@@ -247,8 +285,8 @@ To stabilize the architecture, the primary directive must be load reduction at t
 Voice Layer Synced. Synthesis complete. 😼
 ⏱️ 5.33s
 ======================================================================
-[LIVE | 23.1s | GPU LOAD: 91% | VRAM: NOMINAL | TEMP: 73°C | CPU: 11.0% | RAM: STABLE]
-[MEMORY] Exported to Offline Vector DB: [GROUP_SIGNATURE_A]
+[LIVE | 23.1s | GPU LOAD: 91% | VRAM: 7.29/8.5GB | TEMP: 73°C | CPU: 11.0% | RAM: 13.96GB]
+[MEMORY] Salvestatud ChromaDB: 7b69e5ff-00de-4f8f-8a17-d67518e615db
  
 ┌── TIMING BREAKDOWN ──
 │ gen_anchor       5.19s
@@ -259,9 +297,7 @@ Voice Layer Synced. Synthesis complete. 😼
 ├──────────────────────
 │ TOTAL: 22.80s
 └──────────────────────
-[LIVE | 23.4s | GPU LOAD: 0% | VRAM: NOMINAL | TEMP: 61°C | CPU: 11.0% | RAM: STABLE]
+[LIVE | 23.4s | GPU LOAD: 0% | VRAM: 7.29/8.5GB | TEMP: 61°C | CPU: 11.0% | RAM: 13.90GB]
 Process finished with exit code 0
-
-***
-
-What this demonstrates: memory-context injection cor
+```
+ 
