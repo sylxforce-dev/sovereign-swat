@@ -13,5 +13,5 @@ Every answer passes through a small internal debate first — a structural analy
  
 ---
  
-Full technical writeup — architecture, design decisions, setup instructions — coming soon 👀
+Full technical writeup — architecture, design decisions, and real execution logs — see **[ARCHITECTURE.md](ARCHITECTURE.md)** and **[LOGS.md](LOGS.md)**.
  
