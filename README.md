@@ -1,23 +1,18 @@
-# Sovereign SWAT — Architecture & Reasoning Governance
-
-A Sovereign Intelligence framework. A multi-agent matrix built to demonstrate structural reasoning, memory governance, and deterministic inference flow. 
-
+# Sovereign SWAT — what is this?
+ 
+A solo project, built in about two to three weeks. Three AI pipelines that run entirely on my own machine — no cloud APIs, no external calls.
+ 
 **Core Components:**
 * **Pipeline A (Fresh):** Single-pass reasoning matrix for immediate problem decomposition.
 * **Pipeline B (Context-Aware):** Memory-injected reasoning, maintaining logical continuity across sessions.
 * **Pipeline C (Maintenance):** Autonomous background memory curation, deduplication, and logical grouping.
-
-**The Engine:**
-Every inference flow passes through a deterministic **5-Stage Cognitive Matrix** (PreValidator → Structural Analyst → Adversarial Critic → PostValidator → Synthesis). Answers are gated by a deterministic Python algorithm, not soft LLM logic. 
-
-**Why this exists:**
-To prove that superior intelligence is a product of **system architecture**, not raw model size or cloud dependency. This demonstrates how to maximize local model utility through rigorous governance and explicit memory serialization.
-
+**The Engine:** Every inference flow passes through a deterministic 5-Stage Cognitive Matrix (PreValidator → Structural Analyst → Adversarial Critic → PostValidator → Synthesis). Answers are gated by a deterministic Python algorithm, not soft LLM logic — a structural analyst and an adversarial critic check each other before any response gets synthesized.
+ 
+**Why I built it:** to show my own skill and thinking — how efficiently I can get a local, self-hosted model to reason well and stay efficient, without relying on a cloud provider's compute or API.
+ 
 ---
-
-**Technical Documentation:**
-Full structural breakdown, empirical evidence, and operational logs:
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** (System design and design decisions)
-- **[LOGS.md](LOGS.md)** (Real, unedited operational execution traces)
-
-*© 2026 Sovereign SWAT. All Rights Reserved. This architecture, the cognitive engine design, and the multi-agent orchestration logic are proprietary intellectual property. For architectural consulting or system licensing, contact the Architect.*
+ 
+Full technical writeup — architecture, design decisions, and real execution logs:
+* **[ARCHITECTURE.md](ARCHITECTURE.md)** (system design and design decisions)
+* **[LOGS.md](LOGS.md)** (real, unedited operational execution traces)
+ 
