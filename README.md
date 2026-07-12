@@ -1,17 +1,23 @@
-# Sovereign SWAT — what is this?
- 
-A solo project, built in about two to three weeks.
- 
-Three AI pipelines that run entirely on my own machine — no cloud APIs, no external calls.
- 
-- **Pipeline A** writes fresh answers.
-- **Pipeline B** reads and builds on past context.
-- **Pipeline C** runs in the background, cleaning up and organizing memory over time.
-Every answer passes through a small internal debate first — a structural analyst and an adversarial critic checking each other — before a final response gets synthesized. That final gate is a deterministic check, not another LLM call.
- 
-**Why I built it:** to show my own skill and thinking — how efficiently I can get a local, self-hosted model to reason well and stay efficient, without relying on a cloud provider's compute or API.
- 
+# Sovereign SWAT — Architecture & Reasoning Governance
+
+A Sovereign Intelligence framework. A multi-agent matrix built to demonstrate structural reasoning, memory governance, and deterministic inference flow. 
+
+**Core Components:**
+* **Pipeline A (Fresh):** Single-pass reasoning matrix for immediate problem decomposition.
+* **Pipeline B (Context-Aware):** Memory-injected reasoning, maintaining logical continuity across sessions.
+* **Pipeline C (Maintenance):** Autonomous background memory curation, deduplication, and logical grouping[cite: 2].
+
+**The Engine:**
+Every inference flow passes through a deterministic **5-Stage Cognitive Matrix** (PreValidator → Structural Analyst → Adversarial Critic → PostValidator → Synthesis). Answers are gated by a deterministic Python algorithm, not soft LLM logic[cite: 2]. 
+
+**Why this exists:**
+To prove that superior intelligence is a product of **system architecture**, not raw model size or cloud dependency. This demonstrates how to maximize local model utility through rigorous governance and explicit memory serialization[cite: 2].
+
 ---
- 
-Full technical writeup — architecture, design decisions, and real execution logs — see **[ARCHITECTURE.md](ARCHITECTURE.md)** and **[LOGS.md](LOGS.md)**.
- 
+
+**Technical Documentation:**
+Full structural breakdown, empirical evidence, and operational logs:
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** (System design and design decisions)[cite: 2]
+- **[LOGS.md](LOGS.md)** (Real, unedited operational execution traces)[cite: 1]
+
+*© 2026 Sovereign SWAT. All Rights Reserved. This architecture, the cognitive engine design, and the multi-agent orchestration logic are proprietary intellectual property. For architectural consulting or system licensing, contact the Architect.*
