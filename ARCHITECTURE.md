@@ -96,7 +96,18 @@ This pipeline is the sole authority on memory quality, deduplication, and logica
  
 ## ⚠️ Known Limitations
  
-This pipeline is optimized for **technical, architectural, and risk-bearing questions** — the kind where a structural breakdown (Reasoning) and an adversarial risk critique (Oracle) genuinely add value. It is not a general-purpose chatbot, and it shows: casual, simple, or non-technical queries still get routed through the full 5-stage matrix, which tends to over-engineer trivial requests. Ask it something simple, and Reasoning will earnestly analyze it with unnecessary technical rigor. There is currently no complexity-based short-circuit that lets PreValidator downshift a lightweight query; every query receives the same heavy architectural scrutiny.
+This pipeline is optimized for **technical, architectural, and risk-bearing
+questions** — the kind where a structural breakdown (Reasoning) and an
+adversarial risk critique (Oracle) genuinely add value. It is not a
+general-purpose chatbot, and it shows: casual, simple, or non-technical
+queries still get routed through the full 5-stage matrix, which tends to
+over-engineer trivial requests. Ask it something like "how do you build a
+snowman" and Reasoning will earnestly analyze shear forces and load-bearing
+composites — technically coherent, practically absurd for the question
+asked. There is currently no complexity-based short-circuit that lets
+PreValidator downshift a lightweight query to a lightweight answer; every
+query gets the same five stages regardless of how much rigor it actually
+needs.
  
 ---
  
@@ -111,4 +122,3 @@ All data lives entirely offline in isolated SQLite environments. The embedder us
 ## 🧪 Proof of Execution
  
 Real, unedited terminal logs from actual test runs — see **[LOGS.md](LOGS.md)**.
- 
